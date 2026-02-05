@@ -1,0 +1,169 @@
+/* This is a workaround to ← → missing in Google Fonts web font.
+Explicitly import the missing arrows.
+See https://stackoverflow.com/questions/40822458/styled-unicode-arrows-not-showing-up-with-google-fonts-web-font
+ */
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans&text=%E2%86%90|%E2%86%92');
+
+html,
+body {
+  height: 100%;
+}
+.configure-tooltip {
+  font-size: 20px !important;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+body {
+  position: relative;
+  color: white;
+  background-color: #232c39;
+  font-family: 'Fira Sans', Helvetica, Helvetica Neue, Arial, serif;
+  font-weight: 300;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+button {
+  font-family: 'Fira Sans', Helvetica, Helvetica Neue, Arial, serif;
+  font-weight: 300;
+}
+h2 {
+  margin: 0;
+  font-size: 2.25rem;
+  font-weight: bold;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+p {
+  font-size: 24px;
+}
+li {
+  list-style: none;
+}
+a {
+  color: white;
+  opacity: 0.75;
+  text-decoration: none;
+}
+a:hover {
+  opacity: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+:root {
+  --color_error: #d15e5e;
+  --color_light-grey: #d9d9d9;
+  --color_medium-grey: #707070;
+
+  --color_dark-grey: #414141;
+  --color_light-jet: #222;
+  --color_jet: #1d1b1b;
+  --color_warm-white: #fffbfb;
+  --color_tinge: #c7c3c3;
+  --color_tinge-light: #ebe4e4;
+  --color_tinge-dark: #796c6c;
+  --box-shadow-keycap: inset -1px -1px 0 rgb(0 0 0 / 20%),
+    inset 1px 1px 0 rgb(255 255 255 / 20%);
+  --box-shadow-keyboard: var(--box-shadow-keycap);
+
+}
+
+html[data-theme-mode='dark'] {
+  --color_label: var(--color_medium-grey);
+  --color_label-highlighted: var(--color_light-grey);
+  --color_error: var(--color_error);
+  --border_color_icon: var(--color_medium-grey);
+  --border_color_cell: var(--color_dark-grey);
+  --bg_icon: var(--color_medium-grey);
+  --bg_icon-highlighted: var(--color_light-grey);
+  --color_icon-highlighted: var(--color_jet);
+  --bg_menu: var(--color_light-jet);
+  --color_control: var(--color_dark-grey);
+  --bg_control: var(--color_dark-grey);
+  --bg_outside-accent: var(--color_dark-grey);
+  --bg_control_disabled: var(--color_dark-grey);
+  --bg_control-highlighted: var(--color_light-grey);
+  --bg_gradient: linear-gradient(var(--color_jet), var(--color_light-jet));
+  --bg_control-disabled: transparent;
+}
+html[data-theme-mode='light'] {
+  --color_label: var(--color_medium-grey);
+  --color_label-highlighted: var(--color_light-jet);
+  --color_error: var(--color_error);
+  --border_color_icon: var(--color_medium-grey);
+  --border_color_cell: var(--color_tinge-dark);
+  --bg_icon: var(--color_medium-grey);
+  --bg_icon-highlighted: var(--color_light-jet);
+  --color_icon-highlighted: var(--color_tinge-light);
+  --bg_menu: var(--color_tinge-light);
+  --color_control: var(--color_tinge-light);
+  --color_control-disabled: var(--color_tinge-light);
+  --bg_control: var(--color_tinge);
+  --bg_outside-accent: var(--color_tinge-light);
+  --bg_control-highlighted: var(--color_warm-white);
+  --bg_control-disabled: transparent;
+  --bg_gradient: linear-gradient(
+    var(--color_tinge-light),
+    var(--color_warm-white)
+  );
+}
+
+#root {
+  background: var(--bg_gradient);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+@font-face {
+  font-family: GothamRoundedBold;
+  src: url(/fonts/GothamRoundedBold_21016.ttf) format('opentype');
+}
+@font-face {
+  font-family: GothamRounded;
+  src: url(/fonts/GothamRoundedBook_21018.ttf) format('opentype');
+}
+@font-face {
+  font-family: Symbola;
+  src: url(/fonts/Symbola.ttf) format('opentype');
+}
+
+@keyframes border-glow {
+  0% {
+    border: 2px dashed var(--color_accent);
+  }
+  50% {
+    border: 2px dashed var(--border_color_icon);
+  }
+  100% {
+    border: 2px dashed var(--color_accent);
+  }
+}
+@keyframes roll {
+  0% {
+    transform:  translate3d(-50px, 0px, 0) rotate(-30deg);
+  }
+  100% {
+    transform:   translate3d(50px, 0px, 0) rotate(30deg);
+  }
+}
+@keyframes text-glow {
+  0% {
+    stroke: var(--color_accent);
+  }
+  50% {
+    stroke: var(--color_label);
+  }
+  100% {
+    stroke: var(--color_accent);
+  }
+}
+
+@keyframes select-glow {
+  0% {
+    filter: brightness(0.75);
+  }
+  100% {
+    filter: brightness(1.25);
+  }
+}

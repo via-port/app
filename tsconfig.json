@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types","scripts/via-dev/definitions-fs.ts"],
+  "include": ["src", "types"],
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,

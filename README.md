@@ -4,8 +4,14 @@ This port of VIA enables to self host your own version of the Web App and manual
 
 ## 1. Hosting your own VIA Web App
 
-  TODO: replicate and note all steps to install dependencies and build the app
+1. Install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+2. Install [bun](https://bun.com/docs/installation) (also with `npm install -g bun`)
+3. run `npm i` to install dependencies 
+4. run `npm run dev` run the Web App on your local machine
 
+5. run `npm run build` to create a dist
+
+npm run dev
 
 ## 2. Getting your keyboard supported for VIA-PORT
 

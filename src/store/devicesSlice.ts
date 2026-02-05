@@ -13,14 +13,12 @@ type DevicesState = {
   selectedDevicePath: string | null;
   connectedDevicePaths: ConnectedDevices;
   supportedIds: VendorProductIdMap;
-  forceAuthorize: boolean;
 };
 
 const initialState: DevicesState = {
   selectedDevicePath: null,
   connectedDevicePaths: {},
   supportedIds: {},
-  forceAuthorize: false,
 };
 
 const deviceSlice = createSlice({
@@ -34,9 +32,6 @@ const deviceSlice = createSlice({
       } else {
         state.selectedDevicePath = action.payload.path;
       }
-    },
-    setForceAuthorize: (state, action: PayloadAction<boolean>) => {
-      state.forceAuthorize = action.payload;
     },
     updateConnectedDevices: (
       state,
@@ -71,13 +66,10 @@ export const {
   updateConnectedDevices,
   updateSupportedIds,
   ensureSupportedIds,
-  setForceAuthorize,
 } = deviceSlice.actions;
 
 export default deviceSlice.reducer;
 
-export const getForceAuthorize = (state: RootState) =>
-  state.devices.forceAuthorize;
 export const getConnectedDevices = (state: RootState) =>
   state.devices.connectedDevicePaths;
 export const getSelectedDevicePath = (state: RootState) =>

@@ -1,16 +1,19 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import styled from 'styled-components';
 import {Link, useLocation} from 'wouter';
 import PANES from '../../utils/pane-config';
 import {useAppSelector} from 'src/store/hooks';
 import {getShowDesignTab} from 'src/store/settingsSlice';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faKeyboard} from '@fortawesome/free-solid-svg-icons';
 import {CategoryMenuTooltip} from '../inputs/tooltip';
 import {CategoryIconContainer} from '../panes/grid';
 import {ErrorLink, ErrorsPaneConfig} from '../panes/errors';
 import {ExternalLinks} from './external-links';
 import {useTranslation} from 'react-i18next';
 import {LanguageSelect} from './language-select';
+import {ConnectDeviceModal} from 'src/components/modals/ConnectDeviceModal';
+import {isElectron} from 'src/utils/running-context';
 
 const Container = styled.div`
   width: 100vw;
@@ -35,6 +38,7 @@ export const UnconnectedGlobalMenu = () => {
   const showDesignTab = useAppSelector(getShowDesignTab);
 
   const [location] = useLocation();
+  const [showConnectModal, setShowConnectModal] = useState(false);
 
   const Panes = useMemo(() => {
     return PANES.filter((pane) => pane.key !== ErrorsPaneConfig.key).map(
@@ -58,9 +62,22 @@ export const UnconnectedGlobalMenu = () => {
       <GlobalContainer>
         <ErrorLink />
         {Panes}
+        {!isElectron ? (
+          <CategoryIconContainer
+            $selected={showConnectModal}
+            onClick={() => setShowConnectModal(true)}
+          >
+            <FontAwesomeIcon size={'xl'} icon={faKeyboard} />
+            <CategoryMenuTooltip>{t('Connect keyboard')}</CategoryMenuTooltip>
+          </CategoryIconContainer>
+        ) : null}
         <LanguageSelect />
         <ExternalLinks />
       </GlobalContainer>
+      <ConnectDeviceModal
+        show={showConnectModal}
+        onClose={() => setShowConnectModal(false)}
+      />
     </React.Fragment>
   );
 };

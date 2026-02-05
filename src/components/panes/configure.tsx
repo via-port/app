@@ -33,7 +33,6 @@ import {
   setConfigureKeyboardIsSelectable,
 } from 'src/store/keymapSlice';
 import {useDispatch} from 'react-redux';
-import {reloadConnectedDevices} from 'src/store/devicesThunks';
 import {getV3MenuComponents} from 'src/store/menusSlice';
 import {getIsMacroFeatureSupported} from 'src/store/macrosSlice';
 import {getConnectedDevices, getSupportedIds} from 'src/store/devicesSlice';
@@ -42,6 +41,7 @@ import {useAppDispatch} from 'src/store/hooks';
 import {MenuTooltip} from '../inputs/tooltip';
 import {getRenderMode, getSelectedTheme} from 'src/store/settingsSlice';
 import {useTranslation} from 'react-i18next';
+import {ConnectDeviceModal} from 'src/components/modals/ConnectDeviceModal';
 
 const MenuContainer = styled.div`
   padding: 15px 10px 20px 10px;
@@ -156,6 +156,7 @@ const Loader: React.FC<{
   const noSupportedIds = !Object.values(supportedIds).length;
   const noConnectedDevices = !Object.values(connectedDevices).length;
   const [showButton, setShowButton] = useState<boolean>(false);
+  const [showConnectModal, setShowConnectModal] = useState(false);
 
 
 
@@ -172,13 +173,17 @@ const Loader: React.FC<{
     <LoaderPane>
       {<ChippyLoader theme={theme} progress={loadProgress || null} />}
       {(showButton || noConnectedDevices) && !noSupportedIds && !isElectron ? (
-        <AccentButtonLarge onClick={() => dispatch(reloadConnectedDevices())}>
+        <AccentButtonLarge onClick={() => setShowConnectModal(true)}>
           {t('Authorize device')}
           <FontAwesomeIcon style={{marginLeft: '10px'}} icon={faPlus} />
         </AccentButtonLarge>
       ) : (
         <LoadingText isSearching={!selectedDefinition} />
       )}
+      <ConnectDeviceModal
+        show={showConnectModal}
+        onClose={() => setShowConnectModal(false)}
+      />
     </LoaderPane>
   );
 };

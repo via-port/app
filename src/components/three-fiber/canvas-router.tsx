@@ -12,13 +12,19 @@ import {Canvas} from '@react-three/fiber';
 import {DefinitionVersionMap, KeyColorType} from '@the-via/reader';
 import cubeySrc from 'assets/models/cubey.glb';
 import glbSrc from 'assets/models/keyboard_components.glb';
-import React, {Suspense, useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {shallowEqual} from 'react-redux';
 import {
   getCustomDefinitions,
   getSelectedDefinition,
 } from 'src/store/definitionsSlice';
-import {reloadConnectedDevices} from 'src/store/devicesThunks';
 import {useAppDispatch, useAppSelector} from 'src/store/hooks';
 import {
   getConfigureKeyboardIsSelectable,
@@ -40,6 +46,7 @@ import {Test} from '../n-links/keyboard/test';
 import {Camera} from './camera';
 import {LoaderCubey} from './loader-cubey';
 import {UpdateUVMaps} from './update-uv-maps';
+import {ConnectDeviceModal} from 'src/components/modals/ConnectDeviceModal';
 
 useGLTF.preload(cubeySrc, true, true);
 useGLTF.preload(glbSrc, true, true);
@@ -84,6 +91,7 @@ export const NonSuspenseCanvasRouter = () => {
   const loadProgress = useAppSelector(getLoadProgress);
   const {progress} = useProgress();
   const dispatch = useAppDispatch();
+  const [showConnectModal, setShowConnectModal] = useState(false);
   const dimensions = useSize(body);
   const localDefinitions = Object.values(useAppSelector(getCustomDefinitions));
   const selectedDefinition = useAppSelector(getSelectedDefinition);
@@ -166,7 +174,7 @@ export const NonSuspenseCanvasRouter = () => {
             {showAuthorizeButton ? (
               !selectedDefinition ? (
                 <AccentButtonLarge
-                  onClick={() => dispatch(reloadConnectedDevices())}
+                  onClick={() => setShowConnectModal(true)}
                   style={{width: 'max-content'}}
                 >
                   Authorize device
@@ -197,6 +205,10 @@ export const NonSuspenseCanvasRouter = () => {
           />
         </Canvas>
       </div>
+      <ConnectDeviceModal
+        show={showConnectModal}
+        onClose={() => setShowConnectModal(false)}
+      />
     </>
   );
 };

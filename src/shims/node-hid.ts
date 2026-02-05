@@ -72,18 +72,21 @@ const ExtendedHID = {
     }
   },
   devices: async (requestAuthorize = false) => {
-    let devices = await ExtendedHID.getFilteredDevices();
-    // TODO: This is a hack to avoid spamming the requestDevices popup
-    if (devices.length === 0 || requestAuthorize) {
-      try {
-        await ExtendedHID.requestDevice();
-      } catch (e) {
-        // The request seems to fail when the last authorized device is disconnected.
-        return [];
-      }
-      devices = await ExtendedHID.getFilteredDevices();
+    const devices0 = await ExtendedHID.getFilteredDevices();
+
+    // Never open the browser chooser unless explicitly requested by a user action.
+    if (!requestAuthorize) {
+      return devices0.map(tagDevice);
     }
-    return devices.map(tagDevice);
+
+    try {
+      await ExtendedHID.requestDevice();
+    } catch (e) {
+      // User cancelled the chooser or the request failed. Keep flow non-fatal.
+    }
+
+    const devices1 = await ExtendedHID.getFilteredDevices();
+    return devices1.map(tagDevice);
   },
   HID: class HID {
     _hidDevice?: WebVIADevice;

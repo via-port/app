@@ -22,11 +22,9 @@ import {updateV3MenuData} from './menusSlice';
 import {
   clearAllDevices,
   getConnectedDevices,
-  getForceAuthorize,
   getSelectedDevicePath,
   getSupportedIds,
   selectDevice,
-  setForceAuthorize,
   updateConnectedDevices,
   updateSupportedIds,
 } from './devicesSlice';
@@ -38,20 +36,61 @@ import type {
 } from 'src/types/types';
 import {createRetry} from 'src/utils/retry';
 import {extractDeviceInfo, logAppError} from './errorsSlice';
-import {tryForgetDevice} from 'src/shims/node-hid';
+import {HID, tryForgetDevice} from 'src/shims/node-hid';
 import {isAuthorizedDeviceConnected} from 'src/utils/type-predicates';
 import {loadFirmwareVersion} from './firmwareSlice';
 
 const selectConnectedDeviceRetry = createRetry(8, 100);
 
 export const selectConnectedDeviceByPath =
-  (path: string): AppThunk =>
+  (path: string): AppThunk<Promise<boolean>> =>
   async (dispatch, getState) => {
     // John you drongo, don't trust the compiler, dispatches are totes awaitable for async thunks
     await dispatch(reloadConnectedDevices());
     const connectedDevice = getConnectedDevices(getState())[path];
     if (connectedDevice) {
       dispatch(selectConnectedDevice(connectedDevice));
+      return true;
+    }
+    return false;
+  };
+
+export type RequestAuthorizationResult =
+  | {status: 'authorized'}
+  | {status: 'cancelled'}
+  | {status: 'error'; error: unknown};
+
+const isCancelledRequestDeviceError = (e: unknown) => {
+  if (typeof DOMException !== 'undefined' && e instanceof DOMException) {
+    return e.name === 'NotAllowedError' || e.name === 'AbortError';
+  }
+
+  // Some browsers/contexts may throw a plain object.
+  if (typeof e === 'object' && e && 'name' in e) {
+    const name = (e as any).name as unknown;
+    return name === 'NotAllowedError' || name === 'AbortError';
+  }
+
+  return false;
+};
+
+export const requestAuthorizationAndReload =
+  (): AppThunk<Promise<RequestAuthorizationResult>> => async (dispatch) => {
+    try {
+      // IMPORTANT: must be a direct user gesture (no awaited dispatch before this).
+      const device = await HID.requestDevice();
+      if (!device) {
+        return {status: 'cancelled'};
+      }
+
+      // John you drongo, don't trust the compiler, dispatches are totes awaitable for async thunks
+      await dispatch(reloadConnectedDevices());
+      return {status: 'authorized'};
+    } catch (e) {
+      if (isCancelledRequestDeviceError(e)) {
+        return {status: 'cancelled'};
+      }
+      return {status: 'error', error: e};
     }
   };
 
@@ -119,16 +158,12 @@ export const reloadConnectedDevices =
   (): AppThunk => async (dispatch, getState) => {
     const state = getState();
     const selectedDevicePath = getSelectedDevicePath(state);
-    const forceRequest = getForceAuthorize(state);
 
     // TODO: should we store in local storage for when offline?
     // Might be worth looking at whole store to work out which bits to store locally
     const supportedIds = getSupportedIds(state);
 
-    const recognisedDevices = await getRecognisedDevices(
-      supportedIds,
-      forceRequest,
-    );
+    const recognisedDevices = await getRecognisedDevices(supportedIds);
 
     const protocolVersions = await Promise.all(
       recognisedDevices.map((device) =>
@@ -210,7 +245,6 @@ export const reloadConnectedDevices =
       dispatch(selectConnectedDevice(firstConnectedDevice));
     } else if (validDevicesArr.length === 0) {
       dispatch(selectDevice(null));
-      dispatch(setForceAuthorize(true));
     }
   };
 

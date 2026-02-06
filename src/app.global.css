@@ -2,8 +2,8 @@
 Explicitly import the missing arrows.
 See https://stackoverflow.com/questions/40822458/styled-unicode-arrows-not-showing-up-with-google-fonts-web-font
  */
-@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
-@import url('https://fonts.googleapis.com/css?family=Fira+Sans&text=%E2%86%90|%E2%86%92');
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans");
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans&text=%E2%86%90|%E2%86%92");
 
 html,
 body {
@@ -17,7 +17,12 @@ body {
   position: relative;
   color: white;
   background-color: #232c39;
-  font-family: 'Fira Sans', Helvetica, Helvetica Neue, Arial, serif;
+  font-family:
+    "Fira Sans",
+    Helvetica,
+    Helvetica Neue,
+    Arial,
+    serif;
   font-weight: 300;
   overflow: hidden;
   margin: 0;
@@ -25,7 +30,12 @@ body {
   user-select: none;
 }
 button {
-  font-family: 'Fira Sans', Helvetica, Helvetica Neue, Arial, serif;
+  font-family:
+    "Fira Sans",
+    Helvetica,
+    Helvetica Neue,
+    Arial,
+    serif;
   font-weight: 300;
 }
 h2 {
@@ -63,13 +73,11 @@ a:hover {
   --color_tinge: #c7c3c3;
   --color_tinge-light: #ebe4e4;
   --color_tinge-dark: #796c6c;
-  --box-shadow-keycap: inset -1px -1px 0 rgb(0 0 0 / 20%),
-    inset 1px 1px 0 rgb(255 255 255 / 20%);
+  --box-shadow-keycap: inset -1px -1px 0 rgb(0 0 0 / 20%), inset 1px 1px 0 rgb(255 255 255 / 20%);
   --box-shadow-keyboard: var(--box-shadow-keycap);
-
 }
 
-html[data-theme-mode='dark'] {
+html[data-theme-mode="dark"] {
   --color_label: var(--color_medium-grey);
   --color_label-highlighted: var(--color_light-grey);
   --color_error: var(--color_error);
@@ -87,7 +95,7 @@ html[data-theme-mode='dark'] {
   --bg_gradient: linear-gradient(var(--color_jet), var(--color_light-jet));
   --bg_control-disabled: transparent;
 }
-html[data-theme-mode='light'] {
+html[data-theme-mode="light"] {
   --color_label: var(--color_medium-grey);
   --color_label-highlighted: var(--color_light-jet);
   --color_error: var(--color_error);
@@ -103,10 +111,7 @@ html[data-theme-mode='light'] {
   --bg_outside-accent: var(--color_tinge-light);
   --bg_control-highlighted: var(--color_warm-white);
   --bg_control-disabled: transparent;
-  --bg_gradient: linear-gradient(
-    var(--color_tinge-light),
-    var(--color_warm-white)
-  );
+  --bg_gradient: linear-gradient(var(--color_tinge-light), var(--color_warm-white));
 }
 
 #root {
@@ -117,15 +122,15 @@ html[data-theme-mode='light'] {
 }
 @font-face {
   font-family: GothamRoundedBold;
-  src: url(/fonts/GothamRoundedBold_21016.ttf) format('opentype');
+  src: url(/fonts/GothamRoundedBold_21016.ttf) format("opentype");
 }
 @font-face {
   font-family: GothamRounded;
-  src: url(/fonts/GothamRoundedBook_21018.ttf) format('opentype');
+  src: url(/fonts/GothamRoundedBook_21018.ttf) format("opentype");
 }
 @font-face {
   font-family: Symbola;
-  src: url(/fonts/Symbola.ttf) format('opentype');
+  src: url(/fonts/Symbola.ttf) format("opentype");
 }
 
 @keyframes border-glow {
@@ -141,10 +146,10 @@ html[data-theme-mode='light'] {
 }
 @keyframes roll {
   0% {
-    transform:  translate3d(-50px, 0px, 0) rotate(-30deg);
+    transform: translate3d(-50px, 0px, 0) rotate(-30deg);
   }
   100% {
-    transform:   translate3d(50px, 0px, 0) rotate(30deg);
+    transform: translate3d(50px, 0px, 0) rotate(30deg);
   }
 }
 @keyframes text-glow {

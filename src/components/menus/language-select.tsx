@@ -79,6 +79,7 @@ const LanguageSelectors: React.FC<{
   onClickOut: () => void;
 }> = (props) => {
   const langs = [
+    {code:'it', lang: 'Italiano'},
     {code: 'en', lang: 'English'},
     {code: 'zh', lang: '中文'},
     {code: 'ko', lang: '한국어'},
